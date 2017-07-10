@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties>
+	  	<property name="driver" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/mybatis_test?characterEncoding=utf-8&amp;useSSL=false" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</properties>
+
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<property name="dialect" value="mysql"/>
+			<property name="offsetAsPageNum" value="true"/>
+			<property name="rowBoundsWithCount" value="true"/>
+			<property name="reasonable" value="false"/>
+			<!--配置该项当pagesize=0 或limit=0时，查询全部记录-->
+			<property name="pageSizeZero" value="true"/>
+		</plugin>
+	</plugins>
+	<!-- Development Configuration -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<!-- SQL Mapping Files -->
+	<mappers>
+		<!--配置基于xml的映射文件-->
+		<mapper resource="mybatisconfig/mapper/ExampleMapper.xml"></mapper>
+		<!--配置基于接口的映射接口  name为Interface的包名-->
+		<package name="com.agm.dao.mapper"/>
+	</mappers>
+
+</configuration>

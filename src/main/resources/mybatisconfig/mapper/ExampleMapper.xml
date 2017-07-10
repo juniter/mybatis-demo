@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="agm_example_Person">
+	<!-- 查询所有条目 -->
+	<select id="list_person" resultType="com.agm.model.Person">
+ 		SELECT * FROM person
+	</select>
+	
+	<!-- 按条件查询相应条目  -->
+	<select id="list_person_by_condition" parameterType="com.agm.model.Person" resultType="com.agm.model.Person">
+ 		SELECT * FROM person WHERE address=#{address} and company=#{company}
+	</select>
+	
+	<insert id="insert_batch" parameterType="com.agm.model.Person" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO person 
+			(name,password,address,phone,company)
+		VALUES
+		
+		<foreach item="person" collection="list" separator=",">
+			(#{person.name},#{person.password},#{person.address},#{person.phone},#{person.company})
+		</foreach>
+	</insert>
+	
+	<update id="update_person" parameterType="com.agm.model.Person">
+		UPDATE person SET
+			name=#{name},
+			password=#{password},
+			phone=#{phone}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<delete id="delete_specified_person" parameterType="com.agm.model.Person">
+		DELETE FROM
+		    person 
+		WHERE
+			id in
+		<foreach item="person" collection="list" separator="," open="(" close=")">
+			 #{person.id}
+		</foreach>
+	</delete>
+</mapper>
